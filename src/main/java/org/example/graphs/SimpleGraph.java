@@ -46,5 +46,6 @@ public class SimpleGraph<T> {
             }
             graph.add(v1, v2, rand.nextInt());
         }
+
     }
 }
