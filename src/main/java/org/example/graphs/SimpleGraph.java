@@ -8,7 +8,12 @@ public class SimpleGraph<T> {
     //    void toListGraph();
     //    void toMatrixGraph();
     Graph graph;
-    public SimpleGraph(int vertices, boolean directed, Graph.Type type) {
+
+
+    public SimpleGraph() { // Конструктор ( ) по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
+        graph = new ListGraph<T>(false, false);
+    }
+    public SimpleGraph(int vertices, boolean directed, Graph.Type type) { // Конструктор (V, D, F) создает граф с V вершинами, без ребер, типа D (ориентированный/ неориентированный), формы представления F (L- граф/M-граф),
         if (Graph.Type.LIST_GRAPH == type) {
             graph = new ListGraph<T>(directed, false);
         } else {
@@ -21,31 +26,34 @@ public class SimpleGraph<T> {
         }
     }
 
-    public SimpleGraph(int vertices, int edges, boolean directed, Graph.Type type) {
+    public SimpleGraph(int vertices, int edges, boolean directed, Graph.Type type) { // Конструктор (V, E, D, F) создает граф с V вершинами, с E случайными ребрами, типа D (ориентированный / неориентированный), формы представления F (L- граф/M-граф
         if (Graph.Type.LIST_GRAPH == type) {
             graph = new ListGraph<T>(directed, true);
         } else {
 //            graph = new MatrixGraph<T>(directed, true);
         }
 
-        List<Vertex<T>> vertexList = new ArrayList<>();
-        Random rand = new Random();
-        for (int i = 0; i < vertices; ++i) {
-            Vertex vertex = new Vertex<Integer>(rand.nextInt());
-            graph.add(vertex);
+//        List<Vertex<T>> vertexList = new ArrayList<>();
+//        Random rand = new Random();
+//        for (int i = 0; i < vertices; ++i) {
+//            Vertex vertex = new Vertex<Integer>(rand.nextInt());
+//            graph.add(vertex);
+//
+//            vertexList.add(vertex);
+//        }
+//
+//        for (int i = 0; i < edges; ++i) {
+//            int size = vertexList.size();
+//            Vertex v1 = vertexList.get(rand.nextInt(size));
+//            Vertex v2 = vertexList.get(rand.nextInt(size));
+//            while (v1 == v2) {
+//                v2 = vertexList.get(rand.nextInt(size));
+//            }
+//            graph.add(v1, v2, rand.nextInt());
+//        }
 
-            vertexList.add(vertex);
-        }
-
-        for (int i = 0; i < edges; ++i) {
-            int size = vertexList.size();
-            Vertex v1 = vertexList.get(rand.nextInt(size));
-            Vertex v2 = vertexList.get(rand.nextInt(size));
-            while (v1 == v2) {
-                v2 = vertexList.get(rand.nextInt(size));
-            }
-            graph.add(v1, v2, rand.nextInt());
-        }
+    }
+    public void SimpleGraph(SimpleGraph<T> graph) {// Конструктор (G) - конструктор копирования создает объект – копию графа G,
 
     }
 }

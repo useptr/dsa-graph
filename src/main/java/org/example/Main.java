@@ -1,10 +1,11 @@
 package org.example;
 
-import org.example.graphs.MatrixGraph;
+import org.example.graphs.ListGraph;
 
 public class Main {
     public static void main(String[] args) {
-        MatrixGraph mGraph = new MatrixGraph<>();
+
+        ListGraph<Integer> graph = new ListGraph<>(false, false);
         System.out.printf("Hello and welcome!");
 
         for (int i = 1; i <= 5; i++) {
