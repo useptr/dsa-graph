@@ -1,6 +1,64 @@
 package org.example.graphs;
 
 public class Vertex<T> {
+
+    /**
+     * Имя вершины
+     */
+    String label;
+
+    /**
+     * Данные, связанные с вершиной
+     */
+    T data;
+
+    /**
+     * Конструктор(): поле label не определено,
+     */
+    public Vertex(T data) {
+        this.data = data;
+    }
+
+    /**
+     * Конструктор(label): label - имя вершины
+     */
+    Vertex(String label) {
+        this.label = label;
+    }
+
+    Vertex(String label, T data) { // TODO Этот конструктор ваще надо? Его нет в задании
+        this.label = label;
+        this.data = data;
+    }
+
+    /**
+     * GetName() - возвращает имя вершины
+     */
+    public String label() {
+        return label;
+    }
+
+    /**
+     * GetData(): возвращает данные, связанные с вершиной
+     */
+    public T data() {
+        return data;
+    }
+
+    /**
+     * SetName(name) – задает имя вершины
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * SetData(data) – записывает данные data в дескриптор вершины
+     */
+    public void setData(T data) {
+        this.data = data;
+    }
+
     @Override
     public int hashCode() {
         return label.hashCode();
@@ -15,31 +73,6 @@ public class Vertex<T> {
             return false;
         }
         Vertex<?> v = (Vertex<?>) obj;
-        return label.equals(v.label) && data.equals(data);
+        return label.equals(v.label) && data.equals(data); // TODO чо за х
     }
-    String label; // имя вершины,
-    T data; // данные, связанные с вершиной,
-    // Конструктор ():поле name не определено,
-    public Vertex(T data) {
-        this.data = data;
-    }
-    Vertex(String label) {
-        this.label = label;
-    } // Конструктор (label): label - имя вершины
-    Vertex(String label, T data) {
-        this.label = label;
-        this.data = data;
-    }
-    public String label() {
-        return label;
-    } // GetData ( ) - возвращает данные, связанные с вершиной,
-    public T data() {
-        return data;
-    } // GetName ( ) - возвращает имя вершины,
-    public void setLabel(String label) {
-        this.label = label;
-    } // SetName (name) – задает имя вершины,
-    public void setData(T data) {
-        this.data = data;
-    } // SetData (data) – записывает данные data в дескриптор вершины
 }
