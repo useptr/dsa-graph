@@ -1,11 +1,15 @@
 package org.example.graphs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MatrixGraph<T> extends Graph<T> {
 
-    private T vertex;
+    private List<List<Boolean>> adj;
 
     public MatrixGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
+        adj = new ArrayList<>();
     }
 
     @Override
@@ -20,45 +24,33 @@ public class MatrixGraph<T> extends Graph<T> {
     }
 
     @Override
-    public void toListGraph() {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
+    void add(Vertex<T> v) {
+        if (v == null) {
+            return;
+        }
+        super.addVertex(v);
+        adj.forEach(connected -> connected.add(false));
     }
 
     @Override
-    public void toMatrixGraph() {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
+    public void add(Vertex<T> src, Vertex<T> dst) {
+        if (src == null || dst == null) {
+            return;
+        }
+        super.addVertex(src);
+        super.addVertex(dst);
+        // add to adjacency matrix
+        int srcIndex = vertices.indexOf(src);
+        int dstIndex = vertices.indexOf(dst);
+        Boolean connected = adj.get(srcIndex).get(dstIndex);
+        connected = true;
     }
 
     @Override
-    public void add() {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(Vertex<T> v) {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(String label) {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(Vertex<T> v1, Vertex<T> v2) {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(Vertex<T> v1, Vertex<T> v2, int w) {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
+    public void add(Vertex<T> src, Vertex<T> dst, double weight) {
+        if (src == null || dst == null) {
+            return;
+        }
     }
 
     @Override
@@ -68,13 +60,7 @@ public class MatrixGraph<T> extends Graph<T> {
     }
 
     @Override
-    public void remove(Vertex<T> v1, Vertex<T> v2) {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    Edge<T> get(Vertex<T> v1, Vertex<T> v2) {
+    public void remove(Vertex<T> src, Vertex<T> dst) {
         // TODO Implement method
         throw new UnsupportedOperationException();
     }

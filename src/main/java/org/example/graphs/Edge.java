@@ -4,22 +4,22 @@ public class Edge<T> {
     /**
      * v1 - дескриптор вершины, из которой исходит ребро
      */
-    public Vertex<T> src;
+    private Vertex<T> src;
 
     /**
      * v2 - дескриптор вершины, в которую входит ребро
      */
-    public Vertex<T> dst;
+    private Vertex<T> dst;
 
     /**
      * v2 - дескриптор вершины, в которую входит ребро
      */
-    public int weight = -1;
+    private double weight = -1;
 
     /**
      * data - данные, связанные с ребром
      */
-    public T data;
+    private T data;
 
     /**
      * Конструктор (v1, v2): v1 - дескриптор вершины, из которой исходит ребро,
@@ -34,7 +34,7 @@ public class Edge<T> {
      * Конструктор (v1, v2, w): v1 - дескриптор вершины, из которой исходит ребро,
      * v2 - дескриптор вершины, в которую входит ребро, w - вес ребра
      */
-    public Edge(Vertex<T> src, Vertex<T> dst, int weight) {
+    public Edge(Vertex<T> src, Vertex<T> dst, double weight) {
         this.src = src;
         this.dst = dst;
         this.weight = weight;
@@ -43,7 +43,7 @@ public class Edge<T> {
     /**
      * SetW (w) - задание веса ребро
      */
-    public void weight(int weight) {
+    public void weight(double weight) {
         this.weight = weight;
     }
 
@@ -71,7 +71,7 @@ public class Edge<T> {
     /**
      * GetW ( ) - возвращает вес ребра
      */
-    public int weight() {
+    public double weight() {
         return weight;
     }
 

@@ -25,11 +25,12 @@ public class SimpleGraph<T> {
         if (Graph.Type.LIST_GRAPH == type) {
             graph = new ListGraph<T>(directed, false);
         } else {
-//            graph = new MatrixGraph<T>(directed, false);
+            graph = new MatrixGraph<T>(directed, false);
         }
         Random rand = new Random();
         for (int i = 0; i < vertices; ++i) {
-            Vertex vertex = new Vertex<Integer>(rand.nextInt());
+            Vertex<Integer> vertex = new Vertex<Integer>(rand.nextInt());
+            // TODO add a check T is a Integer or fuck of Random
             graph.add(vertex);
         }
     }
@@ -69,5 +70,30 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(SimpleGraph<T> graph) {
 
+    }
+    /**
+     * ToListGraph() преобразует граф к L- графу
+     */
+    public void toListGraph() {
+        if (graph.dense() == Graph.Type.LIST_GRAPH)
+            return;
+        Graph<T> listGraph = new ListGraph<T>(graph.directed(), graph.weighted());
+        // TODO Implement method
+        graph = listGraph;
+    }
+
+    /**
+     * преобразует граф к M- графу
+     */
+    public void toMatrixGraph() {
+        if (graph.dense() == Graph.Type.MATRIX_GRAPH)
+            return;
+        Graph<T> matrixGraph = new MatrixGraph<>(graph.directed(), graph.weighted());
+        // TODO Implement method
+        graph = matrixGraph;
+    }
+    @Override
+    public String toString() {
+        return graph.toString();
     }
 }

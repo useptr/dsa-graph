@@ -5,16 +5,17 @@ public class Vertex<T> {
     /**
      * Имя вершины
      */
-    String label;
+    private String label;
 
     /**
      * Данные, связанные с вершиной
      */
-    T data;
+    private T data;
 
     /**
      * Конструктор(): поле label не определено,
      */
+    public Vertex() {}
     public Vertex(T data) {
         this.data = data;
     }
