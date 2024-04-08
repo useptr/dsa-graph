@@ -15,9 +15,12 @@ public class Vertex<T> {
     /**
      * Конструктор(): поле label не определено,
      */
-    public Vertex() {}
+    public Vertex() {
+        label = new String();
+    }
     public Vertex(T data) {
         this.data = data;
+        label = new String();
     }
 
     /**
@@ -62,18 +65,18 @@ public class Vertex<T> {
 
     @Override
     public int hashCode() {
-        return label.hashCode();
+        return super.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Vertex)) {
-            return false;
-        }
         Vertex<?> v = (Vertex<?>) obj;
-        return label.equals(v.label) && data.equals(data); // TODO чо за х
+        return label == v.label && data == v.data;
     }
 }

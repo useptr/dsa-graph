@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ListGraph<T> extends Graph<T> {
-    private Map<Integer, List<Integer>> adj;
+    private Map<Vertex<T>, List<Vertex<T>>> adj;
 
     public ListGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
@@ -26,30 +26,27 @@ public class ListGraph<T> extends Graph<T> {
     @Override
     void add(Vertex<T> v) {
         super.addVertex(v);
-        // TODO maybe need add new vertex to adjacency list
-//        adj.putIfAbsent(srcIndex, new ArrayList<>());
+        adj.putIfAbsent(v, new ArrayList<>());
     }
     @Override
     public void add(Vertex<T> src, Vertex<T> dst) {
         if (src == null || dst == null) {
             return;
         }
-        addVertex(src);
-        addVertex(dst);
+        super.addVertex(src);
+        super.addVertex(dst);
 
         // add to adjacency list
-        int srcIndex = vertices.indexOf(src);
-        int dstIndex = vertices.indexOf(dst);
-        adj.putIfAbsent(srcIndex, new ArrayList<>());
-        boolean noConnection = !adj.get(srcIndex).contains(dstIndex);
+        adj.putIfAbsent(src, new ArrayList<>());
+        boolean noConnection = !adj.get(src).contains(dst);
         if (noConnection)
-            adj.get(srcIndex).add(dstIndex);
+            adj.get(src).add(dst);
 
         if (!directed) {
-            adj.putIfAbsent(dstIndex, new ArrayList<>());
-            noConnection = !adj.get(dstIndex).contains(srcIndex);
+            adj.putIfAbsent(dst, new ArrayList<>());
+            noConnection = !adj.get(dst).contains(src);
             if (noConnection)
-                adj.get(dstIndex).add(srcIndex);
+                adj.get(dst).add(src);
         }
 
         if (!weighted)
@@ -68,15 +65,16 @@ public class ListGraph<T> extends Graph<T> {
         super.addVertex(dst);
 
         // add to adjacency list
-        int srcIndex = vertices.indexOf(src);
-        int dstIndex = vertices.indexOf(dst);
-        adj.putIfAbsent(srcIndex, new ArrayList<>());
-        // TODO add a check adjacency list not contain connected src, dst
-        adj.get(srcIndex).add(dstIndex);
+        adj.putIfAbsent(src, new ArrayList<>());
+        boolean noConnection = !adj.get(src).contains(dst);
+        if (noConnection)
+            adj.get(src).add(dst);
+
         if (!directed) {
-            adj.putIfAbsent(dstIndex, new ArrayList<>());
-            // TODO add a check adjacency list not contain connected src, dst
-            adj.get(dstIndex).add(srcIndex);
+            adj.putIfAbsent(dst, new ArrayList<>());
+            noConnection = !adj.get(dst).contains(src);
+            if (noConnection)
+                adj.get(dst).add(src);
         }
 
         if (!weighted)
@@ -92,8 +90,8 @@ public class ListGraph<T> extends Graph<T> {
         // remove from adjacency list
         int removedIndex = vertices.indexOf(v);
         if (removedIndex != -1) { // remove from adjacency list
-            adj.remove(removedIndex);
-            adj.values().forEach(connected -> connected.removeIf(index -> (index == removedIndex)));
+            adj.remove(v);
+            adj.values().forEach(connected -> connected.removeIf(vertex -> (vertex == v)));
         }
 
         super.removeVertex(v);
@@ -105,14 +103,12 @@ public class ListGraph<T> extends Graph<T> {
             return;
 
         // remove from adjacency list
-        int srcIndex = vertices.indexOf(src);
-        int dstIndex = vertices.indexOf(dst);
-        if (adj.get(srcIndex) != null) {
-            adj.get(srcIndex).removeIf(index -> (index == dstIndex));
+        if (adj.get(src) != null) {
+            adj.get(src).removeIf(vertex -> (vertex == dst));
         }
         if (!directed) {
-            if (adj.get(dstIndex) != null) {
-                adj.get(dstIndex).removeIf(index -> (index == srcIndex));
+            if (adj.get(dst) != null) {
+                adj.get(dst).removeIf(vertex -> (vertex == src));
             }
         }
 
@@ -127,31 +123,38 @@ public class ListGraph<T> extends Graph<T> {
 
     @Override
     public String toString() {
-        String adjMatrix = "";
+        String adjList = "";
+        for (Vertex<T> key : adj.keySet()) {
+            adjList += vertices.indexOf(key) + " :";
+            for (Vertex<T> vertex : adj.get(key)) {
+                adjList += " ," + vertices.indexOf(vertex);
+            }
+            adjList += "\n";
+        }
 //        for (int i = 0; i < vertices.size(); ++i) {
-//            adjMatrix += "\t" + i;
+//            adjList += "\t" + i;
 //        }
-//        adjMatrix += "\n";
+//        adjList += "\n";
 //        for (int i = 0; i < vertices.size(); ++i) {
 //
-//            adjMatrix += i + ":";
+//            adjList += i + ":";
 //            for (int j = 0; j < vertices.size(); ++j) {
-//                adjMatrix += "\t";
+//                adjList += "\t";
 //
 //                if (weighted) {
 //                    Edge<T> edge = get(i, j);
-//                    adjMatrix += edge.weight();
+//                    adjList += edge.weight();
 //                } else {
 ////                    List<Integer> connected = adj.get(i);
 //                    if (adj.get(i) != null && adj.get(i).get(j) != null) {
-//                        adjMatrix += "1";
+//                        adjList += "1";
 //                    } else {
-//                        adjMatrix += "0";
+//                        adjList += "0";
 //                    }
 //                }
 //            }
-//            adjMatrix += "\n";
+//            adjList += "\n";
 //        }
-        return adjMatrix;
+        return adjList;
     }
 }
