@@ -1,5 +1,7 @@
 package org.example.graphs;
 
+import java.util.Objects;
+
 public class Vertex<T> {
 
     /**
@@ -16,11 +18,11 @@ public class Vertex<T> {
      * Конструктор(): поле label не определено,
      */
     public Vertex() {
-        label = new String();
+        label = "";
     }
     public Vertex(T data) {
         this.data = data;
-        label = new String();
+        label = "";
     }
 
     /**
@@ -77,6 +79,6 @@ public class Vertex<T> {
             return true;
         }
         Vertex<?> v = (Vertex<?>) obj;
-        return label == v.label && data == v.data;
+        return Objects.equals(label, v.label) && data == v.data;
     }
 }

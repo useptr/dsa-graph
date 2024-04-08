@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MatrixGraph<T> extends AbstractGraph<T> {
 
-    private List<List<Boolean>> adj;
+    private final List<List<Boolean>> adj;
 
     public MatrixGraph(boolean directed, boolean weighted) {
         super(directed, weighted);

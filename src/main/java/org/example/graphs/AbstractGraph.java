@@ -154,7 +154,7 @@ public abstract class AbstractGraph<T> {
 //        edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
 //    }
     protected void addVertex(Vertex<T> vertex) {
-        if (vertex==null && vertices.contains(vertex)) {
+        if (vertex==null || vertices.contains(vertex)) {
             return;
         }
         vertices.add(vertex);

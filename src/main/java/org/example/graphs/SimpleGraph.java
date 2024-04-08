@@ -27,7 +27,7 @@ public class SimpleGraph<T> {
         }
         Random rand = new Random();
         for (int i = 0; i < vertices; ++i) {
-            Vertex<Integer> vertex = new Vertex<Integer>(rand.nextInt());
+            Vertex<Integer> vertex = new Vertex<>(rand.nextInt());
             // TODO add a check T is a Integer or fuck of Random
             abstractGraph.add(vertex);
         }

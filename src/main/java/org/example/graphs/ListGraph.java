@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ListGraph<T> extends AbstractGraph<T> {
-    private Map<Vertex<T>, List<Vertex<T>>> adj;
+    private final Map<Vertex<T>, List<Vertex<T>>> adj;
 
     public ListGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
