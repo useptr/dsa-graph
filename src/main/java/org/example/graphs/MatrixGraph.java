@@ -25,50 +25,24 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
 
     @Override
     protected void add(Vertex<T> v) {
-        if (v == null) {
+        if (v == null)
             return;
-        }
         super.addVertex(v);
 
         boolean vertexExist = vertices.indexOf(v) < adj.size();
         if (!vertexExist) {
             List<Boolean> connections = new ArrayList<>();
-            for (int i = 0; i < adj.size(); ++i) {
+            for (int i = 0; i < adj.size(); ++i)
                 connections.add(false);
-            }
             adj.add(connections);
             adj.forEach(connected -> connected.add(false));
         }
     }
 
     @Override
-    public void add(Vertex<T> src, Vertex<T> dst) {
-        if (src == null || dst == null) {
-            return;
-        }
-        super.addVertex(src);
-        super.addVertex(dst);
-
-        // add to adjacency matrix
-        // check vertex existing
-        add(src);
-        add(dst);
-        int srcIndex = vertices.indexOf(src);
-        int dstIndex = vertices.indexOf(dst);
-        // update connection
-        adj.get(srcIndex).set(dstIndex,true);
-        if (!directed) {
-            adj.get(dstIndex).set(srcIndex,true);
-        }
-
-        super.addEdge(new Edge<>(src, dst));
-    }
-
-    @Override
     public void add(Vertex<T> src, Vertex<T> dst, double weight) {
-        if (src == null || dst == null) {
+        if (src == null || dst == null)
             return;
-        }
         super.addVertex(src);
         super.addVertex(dst);
 
@@ -80,9 +54,8 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
         int dstIndex = vertices.indexOf(dst);
         // update connection
         adj.get(srcIndex).set(dstIndex,true);
-        if (!directed) {
+        if (!directed)
             adj.get(dstIndex).set(srcIndex,true);
-        }
 
         super.addEdge(new Edge<>(src, dst, weight));
     }
@@ -95,9 +68,8 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
         // remove from adjacency matrix
         int removedIndex = vertices.indexOf(v);
         if (removedIndex != -1) {
-            for (List<Boolean> connections : adj) {
+            for (List<Boolean> connections : adj)
                 connections.remove(removedIndex);
-            }
             adj.remove(removedIndex);
         }
 
@@ -115,19 +87,17 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
         boolean validConnection = srcIndex != -1 && dstIndex != -1 && srcIndex < adj.size() && dstIndex < adj.size();
         if (validConnection) {
             adj.get(srcIndex).set(dstIndex,false);
-            if (!directed) {
+            if (!directed)
                 adj.get(dstIndex).set(srcIndex,false);
-            }
         }
 
         super.removeEdge(src, dst);
     }
 
     @Override
-    protected List<Edge<T>> connections() { // return unique connection if graph is directed
-        if (weighted) {
+    protected List<Edge<T>> connections() { // return unique connection if graph is not directed
+        if (weighted)
             return null;
-        }
         List<Edge<T>> connections = new ArrayList<>();
         for (int i = 0; i < adj.size(); ++i) {
             List<Boolean> connected = adj.get(i);

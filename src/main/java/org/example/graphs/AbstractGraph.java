@@ -34,6 +34,8 @@ public abstract class AbstractGraph<T> {
         }
 
         public VertexIterator next() { // ++
+//            int index = graph.vertices.indexOf(current);
+//            return graph.vertices.get(index+1);
             return null;
         }
 
@@ -106,7 +108,6 @@ public abstract class AbstractGraph<T> {
 
     protected boolean directed;
     protected boolean weighted;
-
     protected List<Edge<T>> edges;
     protected List<Vertex<T>> vertices;
 
@@ -119,7 +120,7 @@ public abstract class AbstractGraph<T> {
         vertices = new ArrayList<>();
     }
 
-    abstract protected List<Edge<T>> connections(); // return unique connection if graph is directed
+    abstract protected List<Edge<T>> connections(); // return unique connection if graph is not directed
 
     public void renderToPng(String path) {
         MutableGraph g = mutGraph("example").setDirected(directed);
@@ -172,15 +173,19 @@ public abstract class AbstractGraph<T> {
         }
         return false;
     }
-
-    //    protected void removeAllEdgesWithVertex(Vertex<T> vertex) {
-//        edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
-//    }
     protected void addVertex(Vertex<T> vertex) {
         if (vertex == null || vertices.contains(vertex)) {
             return;
         }
         vertices.add(vertex);
+    }
+
+    public List<Edge<T>> getEdges() {
+        return edges;
+    }
+
+    public List<Vertex<T>> getVertices() {
+        return vertices;
     }
 
     /**
@@ -221,26 +226,8 @@ public abstract class AbstractGraph<T> {
     /**
      * InsertV() добавляет безымянную вершину к графу и возвращает адрес дескриптора вновь созданной вершины
      */
-    public void add() {
-        vertices.add(new Vertex<>());
-    }
 
-    protected abstract void add(Vertex<T> v); // TODO чо за метод его нету в задании
-
-    /**
-     * добавляет вершину c именем name к графу и возвращает адрес дескриптора вновь созданной вершины
-     */
-    public void add(String label) {
-        if (label == null)
-            return;
-        vertices.add(new Vertex<T>(label));
-    }
-
-    /**
-     * InsertE(src, dst) - добавляет ребро между вершинами графа, заданными адресами дескрипторов src и dst
-     * и возвращает адрес дескриптора вновь созданного ребра
-     */
-    abstract public void add(Vertex<T> src, Vertex<T> dst);
+    protected abstract void add(Vertex<T> v);
 
     /**
      * InsertE(src, dst, weight) - добавляет ребро между вершинами графа, заданными адресами дескрипторов src и dst,
@@ -249,19 +236,17 @@ public abstract class AbstractGraph<T> {
     abstract public void add(Vertex<T> src, Vertex<T> dst, double weight);
 
     protected void removeVertex(Vertex<T> vertex) {
-        if (vertex == null) {
+        if (vertex == null)
             return;
-        }
-//        removeAllEdgesWithVertex(vertex);
-        edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
+        if (weighted) // edges != null
+            edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
         vertices.remove(vertex);
     }
 
     private Edge<T> find(Vertex<T> src, Vertex<T> dst) {
         for (Edge<T> edge : edges) {
-            if (src == edge.source() && dst == edge.destination()) {
+            if (src == edge.source() && dst == edge.destination())
                 return edge;
-            }
         }
         return null;
     }
@@ -276,18 +261,16 @@ public abstract class AbstractGraph<T> {
         if (existed != null) {
             existed.weight(edge.weight());
             existed.data(edge.data());
-        } else {
+        } else
             edges.add(edge);
-        }
 
         if (!directed) {
             existed = find(edge.destination(), edge.source());
             if (existed != null) {
                 existed.weight(edge.weight());
                 existed.data(edge.data());
-            } else {
+            } else
                 edges.add(new Edge<>(edge.destination(), edge.source(), edge.data(), edge.weight()));
-            }
         }
     }
 
@@ -308,22 +291,19 @@ public abstract class AbstractGraph<T> {
         if (!weighted)
             return;
         edges.removeIf(edge -> (edge.source() == src && edge.destination() == dst));
-        if (!directed) {
+        if (!directed)
             edges.removeIf(edge -> (edge.source() == dst && edge.destination() == src));
-        }
     }
 
     /**
      * GetEdge (v1, v2) возвращает адрес дескриптора ребра соединяющего вершины, заданные дескрипторами v1 и v2
      */
     public Edge<T> get(Vertex<T> src, Vertex<T> dst) {
-        if (!weighted) {
+        if (!weighted)
             return null;
-        }
         for (Edge<T> edge : edges) {
-            if (edge.source() == src && edge.destination() == dst) {
+            if (edge.source() == src && edge.destination() == dst)
                 return edge;
-            }
         }
         return null;
     }
@@ -335,6 +315,8 @@ public abstract class AbstractGraph<T> {
     }
 
     public Vertex<T> get(int index) {
+        if (index < 0 || index >= vertices.size())
+            return null;
         return vertices.get(index);
     }
 }

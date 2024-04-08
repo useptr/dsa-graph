@@ -3,10 +3,7 @@ package org.example.graphs;
 import java.util.Random;
 
 public class SimpleGraph<T> {
-
-    // TODO Реализовать методы для работы с абстрактным классом Graph
-    AbstractGraph<T> abstractGraph; // TODO Обозначить дженерик графа Graph<T>, но пока что все ломается с ним
-
+    AbstractGraph<T> abstractGraph;
 
     /**
      * Конструктор() по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
@@ -19,36 +16,32 @@ public class SimpleGraph<T> {
      * Конструктор(V, D, F) создает граф с V вершинами, без ребер,
      * типа D (ориентированный/ неориентированный), формы представления F (L- граф/M-граф)
      */
-    public SimpleGraph(int vertices, boolean directed, AbstractGraph.Type type) {
+    public SimpleGraph(final int vertices, boolean directed, final AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
             abstractGraph = new ListGraph<>(directed, false);
         } else {
             abstractGraph = new MatrixGraph<>(directed, false);
         }
-
-        for (int i = 0; i < vertices; ++i) {
-            // TODO fuck random
+        while (abstractGraph.vertices() < vertices)
             abstractGraph.add(new Vertex<>());
-        }
     }
 
     /**
      * Конструктор(V, E, D, F) создает граф с V вершинами, с E случайными ребрами,
      * типа D (ориентированный / неориентированный), формы представления F (L- граф/M-граф)
      */
-    public SimpleGraph(int vertices, int edges, boolean directed, AbstractGraph.Type type) {
+    public SimpleGraph(final int vertices, final int edges, final boolean directed, final AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
             abstractGraph = new ListGraph<T>(directed, true);
         } else {
             abstractGraph = new MatrixGraph<T>(directed, true);
         }
 
-        Random rand = new Random();
-        for (int i = 0; i < vertices; ++i) {
+        while (abstractGraph.vertices() < vertices)
             abstractGraph.add(new Vertex<>());
-        }
 
-        for (int i = 0; i < edges; ++i) {
+        Random rand = new Random();
+        while (abstractGraph.edges() < edges) {
             int size = abstractGraph.vertices();
             Vertex<T> v1 = abstractGraph.get(rand.nextInt(size));
             Vertex<T> v2 = abstractGraph.get(rand.nextInt(size));
@@ -71,9 +64,17 @@ public class SimpleGraph<T> {
     public void toListGraph() {
         if (abstractGraph.dense() == AbstractGraph.Type.LIST_GRAPH)
             return;
-        AbstractGraph<T> listAbstractGraph = new ListGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
+        AbstractGraph<T> listGraph = new ListGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
+        for (Vertex<T> vertex : abstractGraph.getVertices()) {
+            listGraph.add(vertex);
+        }
+        if (abstractGraph.weighted()) {
+//            for (Edge<T> edge : abstractGraph.getVertices()) {
+//                listGraph.add(edge);
+//            }
+        }
         // TODO Implement method
-        abstractGraph = listAbstractGraph;
+        abstractGraph = listGraph;
     }
 
     /**
@@ -82,9 +83,12 @@ public class SimpleGraph<T> {
     public void toMatrixGraph() {
         if (abstractGraph.dense() == AbstractGraph.Type.MATRIX_GRAPH)
             return;
-        AbstractGraph<T> matrixAbstractGraph = new MatrixGraph<>(abstractGraph.directed(), abstractGraph.weighted());
+        AbstractGraph<T> matrixGraph = new MatrixGraph<>(abstractGraph.directed(), abstractGraph.weighted());
+        for (Vertex<T> vertex : abstractGraph.getVertices()) {
+            matrixGraph.add(vertex);
+        }
         // TODO Implement method
-        abstractGraph = matrixAbstractGraph;
+        abstractGraph = matrixGraph;
     }
 
     /**
@@ -130,15 +134,15 @@ public class SimpleGraph<T> {
      * InsertV() добавляет безымянную вершину к графу и возвращает адрес дескриптора вновь созданной вершины
      */
     public void add() {
-        abstractGraph.add();
+        abstractGraph.add(new Vertex<>());
     }
 
     public void add(String label) {
-        abstractGraph.add(label);
+        abstractGraph.add(new Vertex<>(label));
     }
 
     public void add(Vertex<T> src, Vertex<T> dst) {
-        abstractGraph.add(src, dst);
+        abstractGraph.add(src, dst, 0);
     }
 
     public void add(Vertex<T> src, Vertex<T> dst, double weight) {
@@ -166,7 +170,7 @@ public class SimpleGraph<T> {
     }
 
     public void render() {
-        abstractGraph.renderToPng("example/ex1m2.png");
+        abstractGraph.renderToPng("example/graph.png");
     }
 
     @Override

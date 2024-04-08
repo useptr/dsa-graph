@@ -32,7 +32,7 @@ public class Vertex<T> {
         this.label = label;
     }
 
-    Vertex(String label, T data) { // TODO Этот конструктор ваще надо? Его нет в задании
+    Vertex(String label, T data) {
         this.label = label;
         this.data = data;
     }
@@ -64,16 +64,4 @@ public class Vertex<T> {
     public void setData(T data) {
         this.data = data;
     }
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null || obj.getClass() != this.getClass()) {
-//            return false;
-//        }
-//        if (obj == this) {
-//            return true;
-//        }
-//        Vertex<?> v = (Vertex<?>) obj;
-//        return label == v.label && data == v.data;
-//    }
 }

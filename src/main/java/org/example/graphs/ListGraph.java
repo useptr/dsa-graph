@@ -25,35 +25,11 @@ public class ListGraph<T> extends AbstractGraph<T> {
         super.addVertex(v);
         adj.putIfAbsent(v, new ArrayList<>());
     }
-    @Override
-    public void add(Vertex<T> src, Vertex<T> dst) {
-        if (src == null || dst == null) {
-            return;
-        }
-        super.addVertex(src);
-        super.addVertex(dst);
-
-        // add to adjacency list
-        adj.putIfAbsent(src, new ArrayList<>());
-        boolean noConnection = !adj.get(src).contains(dst);
-        if (noConnection)
-            adj.get(src).add(dst);
-
-        if (!directed) {
-            adj.putIfAbsent(dst, new ArrayList<>());
-            noConnection = !adj.get(dst).contains(src);
-            if (noConnection)
-                adj.get(dst).add(src);
-        }
-
-        super.addEdge(new Edge<>(src, dst));
-    }
 
     @Override
     public void add(Vertex<T> src, Vertex<T> dst, double weight) {
-        if (src == null || dst == null) {
+        if (src == null || dst == null)
             return;
-        }
         super.addVertex(src);
         super.addVertex(dst);
 
@@ -94,23 +70,20 @@ public class ListGraph<T> extends AbstractGraph<T> {
             return;
 
         // remove from adjacency list
-        if (adj.get(src) != null) {
+        if (adj.get(src) != null)
             adj.get(src).removeIf(vertex -> (vertex == dst));
-        }
-        if (!directed) {
-            if (adj.get(dst) != null) {
+
+        if (!directed && adj.get(dst) != null)
                 adj.get(dst).removeIf(vertex -> (vertex == src));
-            }
-        }
 
         super.removeEdge(src, dst);
     }
 
     @Override
-    protected List<Edge<T>> connections() { // return unique connection if graph is directed
-        if (weighted) {
+    protected List<Edge<T>> connections() { // return unique connection if graph is not directed
+        if (weighted)
             return null;
-        }
+
         List<Edge<T>> connections = new ArrayList<>();
         for (Vertex<T> src : adj.keySet()) {
             for (Vertex<T> dst : adj.get(src)) {
