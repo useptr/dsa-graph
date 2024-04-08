@@ -49,10 +49,6 @@ public class ListGraph<T> extends Graph<T> {
                 adj.get(dst).add(src);
         }
 
-        if (!weighted)
-            return;
-        // there will be one edge from src to dst if the graph is oriented
-        // TODO if graph directed add a check no connection dst to src, if connection exist update data
         super.addEdge(new Edge<>(src, dst));
     }
 
@@ -77,8 +73,6 @@ public class ListGraph<T> extends Graph<T> {
                 adj.get(dst).add(src);
         }
 
-        if (!weighted)
-            return;
         super.addEdge(new Edge<>(src, dst, weight));
     }
 
@@ -112,13 +106,7 @@ public class ListGraph<T> extends Graph<T> {
             }
         }
 
-        if (!weighted)
-            return;
-
         super.removeEdge(src, dst);
-        if (!directed) {
-            super.removeEdge(dst, src);
-        }
     }
 
     @Override

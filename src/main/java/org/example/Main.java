@@ -12,8 +12,11 @@ import java.util.Objects;
 public class Main {
     public static void main(String[] args) {
 
-        SimpleGraph<Integer> graph = new SimpleGraph<>(4, false, Graph.Type.LIST_GRAPH);
-        System.out.println(graph);
+        SimpleGraph<Integer> listGraph = new SimpleGraph<>(4, false, Graph.Type.LIST_GRAPH);
+        System.out.println(listGraph);
+
+        SimpleGraph<Integer> matrixGraph = new SimpleGraph<>(4, false, Graph.Type.MATRIX_GRAPH);
+        System.out.println(matrixGraph);
 
     }
 }

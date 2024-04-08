@@ -40,6 +40,13 @@ public class Edge<T> {
         this.weight = weight;
     }
 
+    public Edge(Vertex<T> src, Vertex<T> dst, T data, double weight) {
+        this.src = src;
+        this.dst = dst;
+        this.data = data;
+        this.weight = weight;
+    }
+
     /**
      * SetW (w) - задание веса ребро
      */

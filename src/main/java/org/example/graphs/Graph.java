@@ -100,17 +100,37 @@ public abstract class Graph<T> {
         edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
         vertices.remove(vertex);
     }
+    private Edge<T> find(Vertex<T> src, Vertex<T> dst) {
+        for (Edge<T> edge : edges) {
+            if (src == edge.source() && dst == edge.destination()) {
+                return edge;
+            }
+        }
+        return null;
+    }
     public void addEdge(Edge<T> edge) {
         if (edge == null)
             return;
-        for (Edge<T> e : edges) { // check that there is no such edge
-            if (e.source() == edge.source() && e.destination() == edge.destination()) { // if edge exist, update data
-                e.weight(edge.weight());
-                e.data(edge.data());
-                return;
+        // only a weighted graph has edges
+        if (!weighted)
+            return;
+        Edge<T> existed = find(edge.source(), edge.destination());
+        if (existed != null) {
+            existed.weight(edge.weight());
+            existed.data(edge.data());
+        } else {
+            edges.add(edge);
+        }
+
+        if (!directed) {
+            existed = find(edge.destination(), edge.source());
+            if (existed != null) {
+                existed.weight(edge.weight());
+                existed.data(edge.data());
+            } else {
+                edges.add(new Edge<>(edge.destination(), edge.source(), edge.data(), edge.weight()));
             }
         }
-        edges.add(edge);
     }
 
     /**
@@ -126,7 +146,13 @@ public abstract class Graph<T> {
     public void removeEdge(Vertex<T> src, Vertex<T> dst) {
         if (src == null || dst == null)
             return;
+        // only a weighted graph has edges
+        if (!weighted)
+            return;
         edges.removeIf(edge -> (edge.source() == src && edge.destination() == dst));
+        if (!directed) {
+            edges.removeIf(edge -> (edge.source() == dst && edge.destination() == src));
+        }
     }
 
     /**
