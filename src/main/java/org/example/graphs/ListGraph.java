@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListAbstractGraph<T> extends AbstractGraph<T> {
+public class ListGraph<T> extends AbstractGraph<T> {
     private Map<Vertex<T>, List<Vertex<T>>> adj;
 
-    public ListAbstractGraph(boolean directed, boolean weighted) {
+    public ListGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
         adj = new HashMap<>();
     }
@@ -107,6 +107,24 @@ public class ListAbstractGraph<T> extends AbstractGraph<T> {
         }
 
         super.removeEdge(src, dst);
+    }
+
+    @Override
+    protected List<Edge<T>> connections() { // return unique connection if graph is directed
+        if (weighted) {
+            return null;
+        }
+        List<Edge<T>> connections = new ArrayList<>();
+        for (Vertex<T> src : adj.keySet()) {
+            for (Vertex<T> dst : adj.get(src)) {
+                Edge<T> edge = new Edge<>(src, dst);
+                if (directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
+                    continue;
+                }
+                connections.add(edge);
+            }
+        }
+        return connections;
     }
 
     @Override

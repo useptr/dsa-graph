@@ -12,7 +12,7 @@ public class SimpleGraph<T> {
      * Конструктор() по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
      */
     public SimpleGraph() {
-        abstractGraph = new ListAbstractGraph<T>(false, false);
+        abstractGraph = new ListGraph<T>(false, false);
     }
 
     /**
@@ -21,9 +21,9 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(int vertices, boolean directed, AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
-            abstractGraph = new ListAbstractGraph<T>(directed, false);
+            abstractGraph = new ListGraph<T>(directed, false);
         } else {
-            abstractGraph = new MatrixAbstractGraph<T>(directed, false);
+            abstractGraph = new MatrixGraph<T>(directed, false);
         }
         Random rand = new Random();
         for (int i = 0; i < vertices; ++i) {
@@ -39,7 +39,7 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(int vertices, int edges, boolean directed, AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
-            abstractGraph = new ListAbstractGraph<T>(directed, true);
+            abstractGraph = new ListGraph<T>(directed, true);
         } else {
 //            graph = new MatrixGraph<T>(directed, true);
         }
@@ -75,7 +75,7 @@ public class SimpleGraph<T> {
     public void toListGraph() {
         if (abstractGraph.dense() == AbstractGraph.Type.LIST_GRAPH)
             return;
-        AbstractGraph<T> listAbstractGraph = new ListAbstractGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
+        AbstractGraph<T> listAbstractGraph = new ListGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
         // TODO Implement method
         abstractGraph = listAbstractGraph;
     }
@@ -86,7 +86,7 @@ public class SimpleGraph<T> {
     public void toMatrixGraph() {
         if (abstractGraph.dense() == AbstractGraph.Type.MATRIX_GRAPH)
             return;
-        AbstractGraph<T> matrixAbstractGraph = new MatrixAbstractGraph<>(abstractGraph.directed(), abstractGraph.weighted());
+        AbstractGraph<T> matrixAbstractGraph = new MatrixGraph<>(abstractGraph.directed(), abstractGraph.weighted());
         // TODO Implement method
         abstractGraph = matrixAbstractGraph;
     }

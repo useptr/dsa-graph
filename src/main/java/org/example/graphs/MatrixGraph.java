@@ -3,11 +3,11 @@ package org.example.graphs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatrixAbstractGraph<T> extends AbstractGraph<T> {
+public class MatrixGraph<T> extends AbstractGraph<T> {
 
     private List<List<Boolean>> adj;
 
-    public MatrixAbstractGraph(boolean directed, boolean weighted) {
+    public MatrixGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
         adj = new ArrayList<>();
     }
@@ -121,6 +121,27 @@ public class MatrixAbstractGraph<T> extends AbstractGraph<T> {
         }
 
         super.removeEdge(src, dst);
+    }
+
+    @Override
+    protected List<Edge<T>> connections() { // return unique connection if graph is directed
+        if (weighted) {
+            return null;
+        }
+        List<Edge<T>> connections = new ArrayList<>();
+        for (int i = 0; i < adj.size(); ++i) {
+            List<Boolean> connected = adj.get(i);
+            for (int j = 0; j < connected.size(); ++j) {
+                if (connected.get(j)) {
+                    Edge<T> edge = new Edge<>(vertices.get(i), vertices.get(j));
+                    if (directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
+                        continue;
+                    }
+                    connections.add(edge);
+                }
+            }
+        }
+        return connections;
     }
 
     @Override

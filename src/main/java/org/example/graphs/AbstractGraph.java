@@ -1,10 +1,89 @@
 package org.example.graphs;
 
+import guru.nidi.graphviz.attribute.Label;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.model.MutableNode;
+
+import javax.imageio.IIOException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static guru.nidi.graphviz.model.Factory.*;
 
 public abstract class AbstractGraph<T> {
     public enum Type {LIST_GRAPH, MATRIX_GRAPH}
+    public class VertexIterator {
+        private AbstractGraph<T> graph;
+        private Vertex<T> current;
+        public VertexIterator() {
+        }
+        public VertexIterator(AbstractGraph<T> graph, Vertex<T> current) {
+            this.graph = graph;
+            this.current = current;
+        }
+        public Vertex<T> get() { // *
+            return current;
+        }
+        public VertexIterator next () { // ++
+            return null;
+        }
+        public boolean equal(VertexIterator other) { // ==
+            return current == other.current;
+        }
+        public boolean notEqual(VertexIterator other) { // !=
+            return !equal(other);
+        }
+    }
+
+    public class EdgeIterator {
+        private AbstractGraph<T> graph;
+        private Edge<T> current;
+        public EdgeIterator() {
+        }
+        public EdgeIterator(AbstractGraph<T> graph, Edge<T> current) {
+            this.graph = graph;
+            this.current = current;
+        }
+        public Edge<T> get() { // *
+            return current;
+        }
+        public EdgeIterator next () { // ++
+            return null;
+        }
+        public boolean equal(EdgeIterator other) { // ==
+            return current == other.current;
+        }
+        public boolean notEqual(EdgeIterator other) { // !=
+            return !equal(other);
+        }
+    }
+    public class OutgoingEdgeIterator {
+        private AbstractGraph<T> graph;
+        private Edge<T> current;
+        public OutgoingEdgeIterator() {
+        }
+        public OutgoingEdgeIterator(AbstractGraph<T> graph, Edge<T> current) {
+            this.graph = graph;
+            this.current = current;
+        }
+        public Edge<T> get() { // *
+            return current;
+        }
+        public OutgoingEdgeIterator next () { // ++
+            return null;
+        }
+        public boolean equal(OutgoingEdgeIterator other) { // ==
+            return current == other.current;
+        }
+        public boolean notEqual(OutgoingEdgeIterator other) { // !=
+            return !equal(other);
+        }
+    }
 
 //    protected int vertices = 0;
 //    protected int edges = 0;
@@ -21,6 +100,55 @@ public abstract class AbstractGraph<T> {
             edges = new ArrayList<>();
         }
         vertices = new ArrayList<>();
+    }
+    abstract protected List<Edge<T>> connections(); // return unique connection if graph is directed
+    public void renderToPng(String path) {
+        MutableGraph g = mutGraph("example").setDirected(directed);
+        HashMap<Vertex<T>, MutableNode> nodes = new HashMap<>();
+        // add all vertices to hash table nodes
+        for (Vertex<T> vertex : vertices) {
+            String description = "id: "+vertices.indexOf(vertex) + "\n" + "label: " + vertex.label() + "\n" + "data: "  + vertex.data().toString();
+            nodes.put(vertex, mutNode(description));
+        }
+        // get all edges
+        List<Edge<T>> connections = connections();
+        if (weighted) {
+            connections = new ArrayList<>();
+            for (Edge<T> edge : edges) {
+                if (directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
+                    continue;
+                }
+                connections.add(edge);
+            }
+        }
+        // add all links
+        for (Edge<T> edge : edges) {
+            String description = "";
+            if (weighted)
+                description += "weight: " + edge.weight() + "\n" + "data: " + edge.data().toString();
+            MutableNode src = nodes.get(edge.source());
+            MutableNode dst = nodes.get(edge.destination());
+            // create graph viz link to node
+            src.addLink(
+                    to(dst).with(Label.of(description))
+            );
+        }
+        // add all nodes to graph viz
+        nodes.forEach((k, v) -> g.add(v));
+        // render
+        try {
+            Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(path));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    protected boolean contain(Vertex<T> src, Vertex<T> dst, List<Edge<T>> edges) {
+        for (Edge<T> edge : edges) {
+            if (src == edge.source() && dst == edge.destination()) {
+                return true;
+            }
+        }
+        return false;
     }
 //    protected void removeAllEdgesWithVertex(Vertex<T> vertex) {
 //        edges.removeIf(edge -> (edge.source() == vertex || edge.destination() == vertex));
