@@ -65,20 +65,15 @@ public class Vertex<T> {
         this.data = data;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        Vertex<?> v = (Vertex<?>) obj;
-        return Objects.equals(label, v.label) && data == v.data;
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null || obj.getClass() != this.getClass()) {
+//            return false;
+//        }
+//        if (obj == this) {
+//            return true;
+//        }
+//        Vertex<?> v = (Vertex<?>) obj;
+//        return label == v.label && data == v.data;
+//    }
 }

@@ -1,9 +1,6 @@
 package org.example.graphs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ListGraph<T> extends AbstractGraph<T> {
     private final Map<Vertex<T>, List<Vertex<T>>> adj;
@@ -18,13 +15,13 @@ public class ListGraph<T> extends AbstractGraph<T> {
         return Type.LIST_GRAPH;
     }
     @Override
-    public int K() {
+    public int saturation() {
         // TODO Implement method
         throw new UnsupportedOperationException();
     }
 
     @Override
-    void add(Vertex<T> v) {
+    protected void add(Vertex<T> v) {
         super.addVertex(v);
         adj.putIfAbsent(v, new ArrayList<>());
     }
@@ -118,7 +115,7 @@ public class ListGraph<T> extends AbstractGraph<T> {
         for (Vertex<T> src : adj.keySet()) {
             for (Vertex<T> dst : adj.get(src)) {
                 Edge<T> edge = new Edge<>(src, dst);
-                if (directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
+                if (!directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
                     continue;
                 }
                 connections.add(edge);
@@ -131,36 +128,12 @@ public class ListGraph<T> extends AbstractGraph<T> {
     public String toString() {
         String adjList = "";
         for (Vertex<T> key : adj.keySet()) {
-            adjList += vertices.indexOf(key) + " :";
+            adjList += vertices.indexOf(key) + " : ";
             for (Vertex<T> vertex : adj.get(key)) {
-                adjList += " ," + vertices.indexOf(vertex);
+                adjList += vertices.indexOf(vertex) + " ";
             }
             adjList += "\n";
         }
-//        for (int i = 0; i < vertices.size(); ++i) {
-//            adjList += "\t" + i;
-//        }
-//        adjList += "\n";
-//        for (int i = 0; i < vertices.size(); ++i) {
-//
-//            adjList += i + ":";
-//            for (int j = 0; j < vertices.size(); ++j) {
-//                adjList += "\t";
-//
-//                if (weighted) {
-//                    Edge<T> edge = get(i, j);
-//                    adjList += edge.weight();
-//                } else {
-////                    List<Integer> connected = adj.get(i);
-//                    if (adj.get(i) != null && adj.get(i).get(j) != null) {
-//                        adjList += "1";
-//                    } else {
-//                        adjList += "0";
-//                    }
-//                }
-//            }
-//            adjList += "\n";
-//        }
         return adjList;
     }
 }

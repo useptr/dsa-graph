@@ -18,13 +18,13 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
     }
 
     @Override
-    public int K() {
+    public int saturation() {
         // TODO Implement method
         throw new UnsupportedOperationException();
     }
 
     @Override
-    void add(Vertex<T> v) {
+    protected void add(Vertex<T> v) {
         if (v == null) {
             return;
         }
@@ -134,7 +134,7 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
             for (int j = 0; j < connected.size(); ++j) {
                 if (connected.get(j)) {
                     Edge<T> edge = new Edge<>(vertices.get(i), vertices.get(j));
-                    if (directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
+                    if (!directed && contain(edge.destination(), edge.source(), connections)) { // skip repetitions
                         continue;
                     }
                     connections.add(edge);
