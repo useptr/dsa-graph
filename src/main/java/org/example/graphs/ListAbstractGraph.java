@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListGraph<T> extends Graph<T> {
+public class ListAbstractGraph<T> extends AbstractGraph<T> {
     private Map<Vertex<T>, List<Vertex<T>>> adj;
 
-    public ListGraph(boolean directed, boolean weighted) {
+    public ListAbstractGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
         adj = new HashMap<>();
     }

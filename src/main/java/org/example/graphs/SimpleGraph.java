@@ -1,37 +1,35 @@
 package org.example.graphs;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class SimpleGraph<T> {
 
     // TODO Реализовать методы для работы с абстрактным классом Graph
-    Graph graph; // TODO Обозначить дженерик графа Graph<T>, но пока что все ломается с ним
+    AbstractGraph abstractGraph; // TODO Обозначить дженерик графа Graph<T>, но пока что все ломается с ним
 
 
     /**
      * Конструктор() по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
      */
     public SimpleGraph() {
-        graph = new ListGraph<T>(false, false);
+        abstractGraph = new ListAbstractGraph<T>(false, false);
     }
 
     /**
      * Конструктор(V, D, F) создает граф с V вершинами, без ребер,
      * типа D (ориентированный/ неориентированный), формы представления F (L- граф/M-граф)
      */
-    public SimpleGraph(int vertices, boolean directed, Graph.Type type) {
-        if (Graph.Type.LIST_GRAPH == type) {
-            graph = new ListGraph<T>(directed, false);
+    public SimpleGraph(int vertices, boolean directed, AbstractGraph.Type type) {
+        if (AbstractGraph.Type.LIST_GRAPH == type) {
+            abstractGraph = new ListAbstractGraph<T>(directed, false);
         } else {
-            graph = new MatrixGraph<T>(directed, false);
+            abstractGraph = new MatrixAbstractGraph<T>(directed, false);
         }
         Random rand = new Random();
         for (int i = 0; i < vertices; ++i) {
             Vertex<Integer> vertex = new Vertex<Integer>(rand.nextInt());
             // TODO add a check T is a Integer or fuck of Random
-            graph.add(vertex);
+            abstractGraph.add(vertex);
         }
     }
 
@@ -39,9 +37,9 @@ public class SimpleGraph<T> {
      * Конструктор(V, E, D, F) создает граф с V вершинами, с E случайными ребрами,
      * типа D (ориентированный / неориентированный), формы представления F (L- граф/M-граф)
      */
-    public SimpleGraph(int vertices, int edges, boolean directed, Graph.Type type) {
-        if (Graph.Type.LIST_GRAPH == type) {
-            graph = new ListGraph<T>(directed, true);
+    public SimpleGraph(int vertices, int edges, boolean directed, AbstractGraph.Type type) {
+        if (AbstractGraph.Type.LIST_GRAPH == type) {
+            abstractGraph = new ListAbstractGraph<T>(directed, true);
         } else {
 //            graph = new MatrixGraph<T>(directed, true);
         }
@@ -75,25 +73,25 @@ public class SimpleGraph<T> {
      * ToListGraph() преобразует граф к L- графу
      */
     public void toListGraph() {
-        if (graph.dense() == Graph.Type.LIST_GRAPH)
+        if (abstractGraph.dense() == AbstractGraph.Type.LIST_GRAPH)
             return;
-        Graph<T> listGraph = new ListGraph<T>(graph.directed(), graph.weighted());
+        AbstractGraph<T> listAbstractGraph = new ListAbstractGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
         // TODO Implement method
-        graph = listGraph;
+        abstractGraph = listAbstractGraph;
     }
 
     /**
      * преобразует граф к M- графу
      */
     public void toMatrixGraph() {
-        if (graph.dense() == Graph.Type.MATRIX_GRAPH)
+        if (abstractGraph.dense() == AbstractGraph.Type.MATRIX_GRAPH)
             return;
-        Graph<T> matrixGraph = new MatrixGraph<>(graph.directed(), graph.weighted());
+        AbstractGraph<T> matrixAbstractGraph = new MatrixAbstractGraph<>(abstractGraph.directed(), abstractGraph.weighted());
         // TODO Implement method
-        graph = matrixGraph;
+        abstractGraph = matrixAbstractGraph;
     }
     @Override
     public String toString() {
-        return graph.toString();
+        return abstractGraph.toString();
     }
 }

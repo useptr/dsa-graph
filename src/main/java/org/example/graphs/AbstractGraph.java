@@ -3,7 +3,7 @@ package org.example.graphs;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Graph<T> {
+public abstract class AbstractGraph<T> {
     public enum Type {LIST_GRAPH, MATRIX_GRAPH}
 
 //    protected int vertices = 0;
@@ -14,7 +14,7 @@ public abstract class Graph<T> {
     protected List<Edge<T>> edges;
     protected List<Vertex<T>> vertices;
 
-    public Graph(boolean directed, boolean weighted) {
+    public AbstractGraph(boolean directed, boolean weighted) {
         this.directed = directed;
         this.weighted = weighted;
         if (weighted) {

@@ -3,11 +3,11 @@ package org.example.graphs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatrixGraph<T> extends Graph<T> {
+public class MatrixAbstractGraph<T> extends AbstractGraph<T> {
 
     private List<List<Boolean>> adj;
 
-    public MatrixGraph(boolean directed, boolean weighted) {
+    public MatrixAbstractGraph(boolean directed, boolean weighted) {
         super(directed, weighted);
         adj = new ArrayList<>();
     }
