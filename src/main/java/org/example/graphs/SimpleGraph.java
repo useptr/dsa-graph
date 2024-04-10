@@ -1,15 +1,16 @@
 package org.example.graphs;
 
+import java.util.List;
 import java.util.Random;
 
 public class SimpleGraph<T> {
-    AbstractGraph<T> abstractGraph;
+    private AbstractGraph<T> graph;
 
     /**
      * Конструктор() по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
      */
     public SimpleGraph() {
-        abstractGraph = new ListGraph<T>(false, false);
+        graph = new ListGraph<T>(false, false);
     }
 
     /**
@@ -18,12 +19,12 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(final int vertices, boolean directed, final AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
-            abstractGraph = new ListGraph<>(directed, false);
+            graph = new ListGraph<>(directed, false);
         } else {
-            abstractGraph = new MatrixGraph<>(directed, false);
+            graph = new MatrixGraph<>(directed, false);
         }
-        while (abstractGraph.vertices() < vertices)
-            abstractGraph.add(new Vertex<>());
+        while (graph.vertices() < vertices)
+            graph.add(new Vertex<>());
     }
 
     /**
@@ -32,23 +33,23 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(final int vertices, final int edges, final boolean directed, final AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
-            abstractGraph = new ListGraph<T>(directed, true);
+            graph = new ListGraph<T>(directed, true);
         } else {
-            abstractGraph = new MatrixGraph<T>(directed, true);
+            graph = new MatrixGraph<T>(directed, true);
         }
 
-        while (abstractGraph.vertices() < vertices)
-            abstractGraph.add(new Vertex<>());
+        while (graph.vertices() < vertices)
+            graph.add(new Vertex<>());
 
         Random rand = new Random();
-        while (abstractGraph.edges() < edges) {
-            int size = abstractGraph.vertices();
-            Vertex<T> v1 = abstractGraph.get(rand.nextInt(size));
-            Vertex<T> v2 = abstractGraph.get(rand.nextInt(size));
+        while (graph.edges() < edges) {
+            int size = graph.vertices();
+            Vertex<T> v1 = graph.get(rand.nextInt(size));
+            Vertex<T> v2 = graph.get(rand.nextInt(size));
             while (v1 == v2) {
-                v2 = abstractGraph.get(rand.nextInt(size));
+                v2 = graph.get(rand.nextInt(size));
             }
-            abstractGraph.add(v1, v2, rand.nextInt(100));
+            graph.add(v1, v2, rand.nextInt(100));
         }
     }
 
@@ -56,125 +57,154 @@ public class SimpleGraph<T> {
      * Конструктор(G) - конструктор копирования создает объект – копию графа G
      */
     public SimpleGraph(SimpleGraph<T> graph) {
+        for (Vertex<T> vertex : graph.graph.getVertices())
+            this.graph.add(vertex);
 
+        List<Edge<T>> edges = graph.graph.connections();
+        if (graph.weighted())
+            edges = graph.graph.getEdges();
+        for (Edge<T> edge : edges)
+            this.graph.add(edge.source(), edge.destination(), edge.weight());
     }
     /**
      * ToListGraph() преобразует граф к L- графу
      */
     public void toListGraph() {
-        if (abstractGraph.dense() == AbstractGraph.Type.LIST_GRAPH)
+        if (graph.dense() == AbstractGraph.Type.LIST_GRAPH)
             return;
-        AbstractGraph<T> listGraph = new ListGraph<T>(abstractGraph.directed(), abstractGraph.weighted());
-        for (Vertex<T> vertex : abstractGraph.getVertices()) {
+        AbstractGraph<T> listGraph = new ListGraph<T>(graph.directed(), graph.weighted());
+
+        for (Vertex<T> vertex : graph.getVertices())
             listGraph.add(vertex);
-        }
-        if (abstractGraph.weighted()) {
-//            for (Edge<T> edge : abstractGraph.getVertices()) {
-//                listGraph.add(edge);
-//            }
-        }
-        // TODO Implement method
-        abstractGraph = listGraph;
+
+        List<Edge<T>> edges = graph.connections();
+        if (graph.weighted())
+            edges = graph.getEdges();
+        for (Edge<T> edge : edges)
+            listGraph.add(edge.source(), edge.destination(), edge.weight());
+
+        graph = listGraph;
     }
 
     /**
      * преобразует граф к M- графу
      */
     public void toMatrixGraph() {
-        if (abstractGraph.dense() == AbstractGraph.Type.MATRIX_GRAPH)
+        if (graph.dense() == AbstractGraph.Type.MATRIX_GRAPH)
             return;
-        AbstractGraph<T> matrixGraph = new MatrixGraph<>(abstractGraph.directed(), abstractGraph.weighted());
-        for (Vertex<T> vertex : abstractGraph.getVertices()) {
+        AbstractGraph<T> matrixGraph = new MatrixGraph<>(graph.directed(), graph.weighted());
+        for (Vertex<T> vertex : graph.getVertices())
             matrixGraph.add(vertex);
-        }
-        // TODO Implement method
-        abstractGraph = matrixGraph;
+
+        List<Edge<T>> edges = graph.connections();
+        if (graph.weighted())
+            edges = graph.getEdges();
+        for (Edge<T> edge : edges)
+            matrixGraph.add(edge.source(), edge.destination(), edge.weight());
+        graph = matrixGraph;
     }
 
     /**
      * V() - возвращает число вершин в графе
      */
     public int vertices() {
-        return abstractGraph.vertices();
+        return graph.vertices();
     }
 
     /**
      * E() - возвращает число ребер в графе
      */
     public int edges() {
-        return abstractGraph.edges();
+        return graph.edges();
     }
 
     /**
      * Directed() - возвращает тип графа (ориентированный / неориентированный)
      */
     public boolean directed() {
-        return abstractGraph.directed();
+        return graph.directed();
     }
 
     public boolean weighted() {
-        return abstractGraph.weighted();
+        return graph.weighted();
     }
 
     /**
      * Dense() - возвращает форму представления графа (L- граф / M- граф)
      */
     public AbstractGraph.Type dense() {
-        return abstractGraph.dense();
+        return graph.dense();
     }
 
     /**
      * K() - возвращает коэффициент насыщенности графа
      */
     public int saturation() {
-        return abstractGraph.saturation();
+        return graph.saturation();
     }
 
     /**
      * InsertV() добавляет безымянную вершину к графу и возвращает адрес дескриптора вновь созданной вершины
      */
     public void add() {
-        abstractGraph.add(new Vertex<>());
+        graph.add(new Vertex<>());
     }
 
     public void add(String label) {
-        abstractGraph.add(new Vertex<>(label));
+        graph.add(new Vertex<>(label));
     }
 
     public void add(Vertex<T> src, Vertex<T> dst) {
-        abstractGraph.add(src, dst, 0);
+        graph.add(src, dst, 0);
     }
 
     public void add(Vertex<T> src, Vertex<T> dst, double weight) {
-        abstractGraph.add(src, dst, weight);
+        graph.add(src, dst, weight);
     }
 
     public void remove(Vertex<T> v) {
-        abstractGraph.remove(v);
+        graph.remove(v);
     }
 
     public void remove(Vertex<T> src, Vertex<T> dst) {
-        abstractGraph.remove(src, dst);
+        graph.remove(src, dst);
     }
 
     public Edge<T> get(int srcIndex, int dstIndex) {
-        return abstractGraph.get(srcIndex, dstIndex);
+        return graph.get(srcIndex, dstIndex);
     }
 
     public Vertex<T> get(int index) {
-        return abstractGraph.get(index);
+        return graph.get(index);
     }
 
     public Edge<T> get(Vertex<T> src, Vertex<T> dst) {
-        return abstractGraph.get(src, dst);
+        return graph.get(src, dst);
     }
 
     public void render() {
-        abstractGraph.renderToPng("example/graph.png");
+        graph.renderToPng("example/graph.png");
     }
-
+    public AbstractGraph<T>.VertexIterator begin() {
+        return graph.begin();
+    }
+    public AbstractGraph<T>.VertexIterator end() {
+        return graph.end();
+    }
+    public AbstractGraph<T>.EdgeIterator beginEdge() {
+        return graph.beginEdge();
+    }
+    public AbstractGraph<T>.EdgeIterator endEdge() {
+        return graph.endEdge();
+    }
+    public AbstractGraph<T>.OutgoingEdgeIterator begin(Vertex<T> vertex) {
+        return graph.begin(vertex);
+    }
+    public AbstractGraph<T>.OutgoingEdgeIterator end(Vertex<T> vertex) {
+        return graph.end(vertex);
+    }
     @Override
     public String toString() {
-        return abstractGraph.toString();
+        return graph.toString();
     }
 }

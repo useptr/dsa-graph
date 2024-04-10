@@ -14,11 +14,6 @@ public class ListGraph<T> extends AbstractGraph<T> {
     public Type dense() {
         return Type.LIST_GRAPH;
     }
-    @Override
-    public int saturation() {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     protected void add(Vertex<T> v) {

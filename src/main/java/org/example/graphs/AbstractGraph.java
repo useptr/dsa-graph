@@ -34,9 +34,12 @@ public abstract class AbstractGraph<T> {
         }
 
         public VertexIterator next() { // ++
-//            int index = graph.vertices.indexOf(current);
-//            return graph.vertices.get(index+1);
-            return null;
+            int index = graph.vertices.indexOf(current);
+            if (index+1 < vertices())
+                current = graph.vertices.get(index+1);
+            else
+                current = graph.fakeVertex;
+            return this;
         }
 
         public boolean equal(VertexIterator other) { // ==
@@ -46,6 +49,13 @@ public abstract class AbstractGraph<T> {
         public boolean notEqual(VertexIterator other) { // !=
             return !equal(other);
         }
+    }
+
+    public VertexIterator begin() {
+        return new VertexIterator(this, vertices.get(0));
+    }
+    public VertexIterator end() {
+        return new VertexIterator(this, fakeVertex);
     }
 
     public class EdgeIterator {
@@ -65,7 +75,12 @@ public abstract class AbstractGraph<T> {
         }
 
         public EdgeIterator next() { // ++
-            return null;
+            int index = graph.edges.indexOf(current);
+            if (index+1 < edges())
+                current = graph.edges.get(index+1);
+            else
+                current = graph.fakeEdge;
+            return this;
         }
 
         public boolean equal(EdgeIterator other) { // ==
@@ -77,39 +92,76 @@ public abstract class AbstractGraph<T> {
         }
     }
 
+    public EdgeIterator beginEdge() {
+        if (weighted)
+            return new EdgeIterator(this, edges.get(0));
+        return endEdge();
+    }
+    public EdgeIterator endEdge() {
+        return new EdgeIterator(this, fakeEdge);
+    }
+
     public class OutgoingEdgeIterator {
         private AbstractGraph<T> graph;
-        private Edge<T> current;
+        private Vertex<T> vertex;
+        private Edge<T> edge;
 
         public OutgoingEdgeIterator() {
         }
 
-        public OutgoingEdgeIterator(AbstractGraph<T> graph, Edge<T> current) {
+        public OutgoingEdgeIterator(AbstractGraph<T> graph, Vertex<T> vertex) {
             this.graph = graph;
-            this.current = current;
+            this.vertex = vertex;
+            if (vertex == graph.fakeVertex)
+                this.edge = graph.fakeEdge;
         }
 
         public Edge<T> get() { // *
-            return current;
+            return edge;
         }
 
         public OutgoingEdgeIterator next() { // ++
-            return null;
+            if (edge == graph.fakeEdge)
+                return this;
+            List<Edge<T>> outgoing = graph.outgoingEdges(vertex);
+            int index = outgoing.indexOf(edge);
+            if (-1 != index && index + 1 < outgoing.size())
+                edge = outgoing.get(index+1);
+            else
+                edge = graph.fakeEdge;
+            return this;
         }
 
         public boolean equal(OutgoingEdgeIterator other) { // ==
-            return current == other.current;
+            return get() == other.get();
         }
 
         public boolean notEqual(OutgoingEdgeIterator other) { // !=
             return !equal(other);
         }
     }
+    protected List<Edge<T>> outgoingEdges(Vertex<T> vertex) {
+        List<Edge<T>> outgoing = new ArrayList<>();
+        edges.forEach(edge -> {
+            if (edge.source() == vertex)
+                outgoing.add(edge);
+        });
+        return outgoing;
+    }
+    public OutgoingEdgeIterator begin(Vertex<T> vertex) {
+        return new OutgoingEdgeIterator(this, vertex);
+    }
+    public OutgoingEdgeIterator end(Vertex<T> vertex) {
+        return new OutgoingEdgeIterator(this, fakeVertex);
+    }
 
     protected boolean directed;
     protected boolean weighted;
     protected List<Edge<T>> edges;
     protected List<Vertex<T>> vertices;
+    protected Vertex<T> fakeVertex;
+
+    protected Edge<T> fakeEdge;
 
     public AbstractGraph(boolean directed, boolean weighted) {
         this.directed = directed;
@@ -118,6 +170,9 @@ public abstract class AbstractGraph<T> {
             edges = new ArrayList<>();
         }
         vertices = new ArrayList<>();
+
+        fakeVertex = new Vertex<>();
+        fakeEdge = new Edge<>();
     }
 
     abstract protected List<Edge<T>> connections(); // return unique connection if graph is not directed
@@ -221,7 +276,11 @@ public abstract class AbstractGraph<T> {
     /**
      * K() - возвращает коэффициент насыщенности графа
      */
-    abstract public int saturation();
+    public int saturation() {
+        if (directed)
+            return edges()/(vertices()*(vertices()-1));
+        return vertices()*(vertices()-1)/2;
+    }
 
     /**
      * InsertV() добавляет безымянную вершину к графу и возвращает адрес дескриптора вновь созданной вершины

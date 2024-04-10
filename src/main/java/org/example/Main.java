@@ -8,7 +8,9 @@ import guru.nidi.graphviz.model.LinkTarget;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import org.example.graphs.AbstractGraph;
+import org.example.graphs.Edge;
 import org.example.graphs.SimpleGraph;
+import org.example.graphs.Vertex;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,46 +23,26 @@ import static guru.nidi.graphviz.attribute.Rank.RankDir.LEFT_TO_RIGHT;
 import static guru.nidi.graphviz.model.Factory.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         //SimpleGraph<Integer> listGraph = new SimpleGraph<>(4,  4, true, AbstractGraph.Type.LIST_GRAPH);
 
-
         SimpleGraph<Integer> matrixGraph = new SimpleGraph<>(4, 4, true, AbstractGraph.Type.MATRIX_GRAPH);
         System.out.println(matrixGraph);
+//        for (AbstractGraph<Integer>.VertexIterator it = matrixGraph.begin(); it.notEqual(matrixGraph.end()); it.next()) {
+//            Vertex<Integer> vertex = it.get();
+//            System.out.println("V");
+//        }
+//
+//        for (AbstractGraph<Integer>.EdgeIterator it = matrixGraph.beginEdge(); it.notEqual(matrixGraph.endEdge()); it.next()) {
+//            Edge<Integer> edge = it.get();
+//            System.out.println("E");
+//        }
 
-        matrixGraph.add(matrixGraph.get(0), matrixGraph.get(1), 228);
+
+//        matrixGraph.add(matrixGraph.get(0), matrixGraph.get(1), 228);
         //listGraph.add(listGraph.get(1), listGraph.get(0));
-        System.out.println(matrixGraph);
-        matrixGraph.render();
-//
-//        MutableGraph g = mutGraph("example1").setDirected(false);
-//        // TODO replace key to Vertex
-//        HashMap<String,MutableNode> nodes = new HashMap<>();
-//        // TODO nodes fill all vertices
-//        for (int i = 0; i < 5; ++i) {
-//            String key = i + ":";
-//            nodes.put(key, mutNode(key));
-//        }
-//
-//        int i = 0;
-//        // TODO nodes fill all edges
-//        for (Map.Entry<String, MutableNode> entry : nodes.entrySet()) {
-//            String key = entry.getKey();
-//            MutableNode node = entry.getValue();
-//            if (i > 0) {
-//                int to = i-1;
-//                System.out.println(key + " | " + to + ":");
-//                MutableNode nodeTo = nodes.get(to + ":");
-//                node.addLink(
-//                        to(nodeTo).with(Label.of("label: \nweight:"))
-//                );
-//            }
-//            ++i;
-//        }
-//        // add all nodes
-//        nodes.forEach((k, v) -> g.add(v));
-//        // render
-//        Graphviz.fromGraph(g).render(Format.PNG).toFile(new File("example/ex1m.png"));
+//        System.out.println(matrixGraph);
+//        matrixGraph.render();
     }
 }

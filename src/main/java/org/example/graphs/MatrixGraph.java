@@ -18,12 +18,6 @@ public class MatrixGraph<T> extends AbstractGraph<T> {
     }
 
     @Override
-    public int saturation() {
-        // TODO Implement method
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     protected void add(Vertex<T> v) {
         if (v == null)
             return;
