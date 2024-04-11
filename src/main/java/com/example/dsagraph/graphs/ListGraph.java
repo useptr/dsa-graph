@@ -22,7 +22,7 @@ public class ListGraph<T> extends AbstractGraph<T> {
     }
 
     @Override
-    public void add(Vertex<T> src, Vertex<T> dst, double weight) {
+    public void add(Vertex<T> src, Vertex<T> dst, T data, double weight) {
         if (src == null || dst == null)
             return;
         super.addVertex(src);
@@ -41,7 +41,7 @@ public class ListGraph<T> extends AbstractGraph<T> {
                 adj.get(dst).add(src);
         }
 
-        super.addEdge(new Edge<>(src, dst, weight));
+        super.addEdge(new Edge<>(src, dst, data, weight));
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ListGraph<T> extends AbstractGraph<T> {
 
     @Override
     protected List<Edge<T>> connections() { // return unique connection if graph is not directed
-        if (weighted)
-            return null;
+//        if (weighted)
+//            return null;
 
         List<Edge<T>> connections = new ArrayList<>();
         for (Vertex<T> src : adj.keySet()) {

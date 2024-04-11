@@ -52,7 +52,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить вершину" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить вершину" onAction="#graphAddVertexBtnClick" />
                </children>
                <padding>
                   <Insets top="5.0" />
@@ -72,7 +72,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить вершину" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить вершину" onAction="#graphRemoveVertexBtnClick" />
                </children>
                <padding>
                   <Insets top="5.0" />
@@ -125,8 +125,8 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить ребро" />
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить ребро" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить ребро" onAction="#graphAddEdgeBtnClick" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить ребро" onAction="#graphRemoveEdgeBtnClick" />
                </children>
                <padding>
                   <Insets top="5.0" />

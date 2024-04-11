@@ -33,23 +33,23 @@ public class SimpleGraph<T> {
      */
     public SimpleGraph(final int vertices, final int edges, final boolean directed, final AbstractGraph.Type type) {
         if (AbstractGraph.Type.LIST_GRAPH == type) {
-            graph = new ListGraph<T>(directed, true);
+            graph = new ListGraph<>(directed, true);
         } else {
-            graph = new MatrixGraph<T>(directed, true);
+            graph = new MatrixGraph<>(directed, true);
         }
 
-        while (graph.vertices() < vertices)
+        while (graph.vertices() <= vertices)
             graph.add(new Vertex<>());
 
         Random rand = new Random();
-        while (graph.edges() < edges) {
+        while ((directed && graph.edges() <= edges) || (!directed && graph.connections().size() < edges)) {
             int size = graph.vertices();
             Vertex<T> v1 = graph.get(rand.nextInt(size));
             Vertex<T> v2 = graph.get(rand.nextInt(size));
             while (v1 == v2) {
                 v2 = graph.get(rand.nextInt(size));
             }
-            graph.add(v1, v2, rand.nextInt(100));
+            graph.add(v1, v2, null, rand.nextInt(100));
         }
     }
 
@@ -64,7 +64,7 @@ public class SimpleGraph<T> {
         if (graph.weighted())
             edges = graph.graph.getEdges();
         for (Edge<T> edge : edges)
-            this.graph.add(edge.source(), edge.destination(), edge.weight());
+            this.graph.add(edge.source(), edge.destination(), edge.data(), edge.weight());
     }
     /**
      * ToListGraph() преобразует граф к L- графу
@@ -81,7 +81,7 @@ public class SimpleGraph<T> {
         if (graph.weighted())
             edges = graph.getEdges();
         for (Edge<T> edge : edges)
-            listGraph.add(edge.source(), edge.destination(), edge.weight());
+            listGraph.add(edge.source(), edge.destination(), edge.data(), edge.weight());
 
         graph = listGraph;
     }
@@ -100,7 +100,7 @@ public class SimpleGraph<T> {
         if (graph.weighted())
             edges = graph.getEdges();
         for (Edge<T> edge : edges)
-            matrixGraph.add(edge.source(), edge.destination(), edge.weight());
+            matrixGraph.add(edge.source(), edge.destination(), edge.data(), edge.weight());
         graph = matrixGraph;
     }
 
@@ -150,16 +150,19 @@ public class SimpleGraph<T> {
         graph.add(new Vertex<>());
     }
 
-    public void add(String label) {
-        graph.add(new Vertex<>(label));
+    public void add(String label, T data) {
+        graph.add(new Vertex<>(label, data));
     }
 
     public void add(Vertex<T> src, Vertex<T> dst) {
-        graph.add(src, dst, 0);
+        graph.add(src, dst, null,0);
     }
 
     public void add(Vertex<T> src, Vertex<T> dst, double weight) {
-        graph.add(src, dst, weight);
+        graph.add(src, dst, null, weight);
+    }
+    public void add(Vertex<T> src, Vertex<T> dst, T data, double weight) {
+        graph.add(src, dst, data, weight);
     }
 
     public void remove(Vertex<T> v) {

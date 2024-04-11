@@ -292,7 +292,7 @@ public abstract class AbstractGraph<T> {
      * InsertE(src, dst, weight) - добавляет ребро между вершинами графа, заданными адресами дескрипторов src и dst,
      * с весом weight и возвращает адрес дескриптора вновь созданного ребра
      */
-    abstract public void add(Vertex<T> src, Vertex<T> dst, double weight);
+    abstract public void add(Vertex<T> src, Vertex<T> dst, T data, double weight);
 
     protected void removeVertex(Vertex<T> vertex) {
         if (vertex == null)
