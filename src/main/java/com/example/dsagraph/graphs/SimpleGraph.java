@@ -5,14 +5,27 @@ import java.util.Random;
 
 public class SimpleGraph<T> {
     private AbstractGraph<T> graph;
+    private EulerianCycle<T> task1;
+    private FloydAlgorithm<T> task2;
 
     /**
      * Конструктор() по умолчанию: создает пустой L - граф с нулевым числом вершин и ребер
      */
     public SimpleGraph() {
         graph = new ListGraph<T>(false, false);
+
+        task1 = new EulerianCycle<T>(this);
+        task2 = new FloydAlgorithm<T>(this);
     }
 
+    public List<List<Integer>> task1() {
+        task1.restart();
+        return task1.result();
+    }
+    public Vertex<T> task2() {
+        task2.restart();
+        return task2.result();
+    }
     /**
      * Конструктор(V, D, F) создает граф с V вершинами, без ребер,
      * типа D (ориентированный/ неориентированный), формы представления F (L- граф/M-граф)
@@ -25,6 +38,9 @@ public class SimpleGraph<T> {
         }
         while (graph.vertices() < vertices)
             graph.add(new Vertex<>());
+
+        task1 = new EulerianCycle<T>(this);
+        task2 = new FloydAlgorithm<T>(this);
     }
 
     /**
@@ -38,11 +54,11 @@ public class SimpleGraph<T> {
             graph = new MatrixGraph<>(directed, true);
         }
 
-        while (graph.vertices() <= vertices)
+        while (graph.vertices() < vertices)
             graph.add(new Vertex<>());
 
         Random rand = new Random();
-        while ((directed && graph.edges() <= edges) || (!directed && graph.connections().size() < edges)) {
+        while ((directed && graph.edges() < edges) || (!directed && graph.connections().size() < edges)) {
             int size = graph.vertices();
             Vertex<T> v1 = graph.get(rand.nextInt(size));
             Vertex<T> v2 = graph.get(rand.nextInt(size));
@@ -51,6 +67,9 @@ public class SimpleGraph<T> {
             }
             graph.add(v1, v2, null, rand.nextInt(100));
         }
+
+        task1 = new EulerianCycle<T>(this);
+        task2 = new FloydAlgorithm<T>(this);
     }
 
     /**
@@ -65,6 +84,9 @@ public class SimpleGraph<T> {
             edges = graph.graph.getEdges();
         for (Edge<T> edge : edges)
             this.graph.add(edge.source(), edge.destination(), edge.data(), edge.weight());
+
+        task1 = new EulerianCycle<T>(this);
+        task2 = new FloydAlgorithm<T>(this);
     }
     /**
      * ToListGraph() преобразует граф к L- графу
@@ -179,6 +201,9 @@ public class SimpleGraph<T> {
 
     public Vertex<T> get(int index) {
         return graph.get(index);
+    }
+    public int get(Vertex<T> vertex) {
+        return graph.get(vertex);
     }
 
     public Edge<T> get(Vertex<T> src, Vertex<T> dst) {

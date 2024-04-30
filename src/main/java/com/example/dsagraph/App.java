@@ -16,10 +16,5 @@ public class App extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setScene(scene);
         stage.show();
-//        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("graph.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-//        stage.setTitle("Hello!");
-//        stage.setScene(scene);
-//        stage.show();
     }
 }

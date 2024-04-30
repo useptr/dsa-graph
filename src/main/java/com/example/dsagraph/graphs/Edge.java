@@ -14,7 +14,7 @@ public class Edge<T> {
     /**
      * v2 - дескриптор вершины, в которую входит ребро
      */
-    private double weight = 0;
+    private double weight = Double.MAX_VALUE;
 
     /**
      * data - данные, связанные с ребром

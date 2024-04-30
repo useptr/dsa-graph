@@ -373,6 +373,10 @@ public abstract class AbstractGraph<T> {
         return get(src, dst);
     }
 
+    public int get(Vertex<T> vertex) {
+        return vertices.indexOf(vertex);
+    }
+
     public Vertex<T> get(int index) {
         if (index < 0 || index >= vertices.size())
             return null;

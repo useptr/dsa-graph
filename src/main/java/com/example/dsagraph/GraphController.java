@@ -2,6 +2,7 @@ package com.example.dsagraph;
 
 import com.example.dsagraph.graphs.AbstractGraph;
 import com.example.dsagraph.graphs.SimpleGraph;
+import com.example.dsagraph.graphs.Vertex;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GraphController {
     private SimpleGraph<String> graph = new SimpleGraph<>(4, 4, true, AbstractGraph.Type.LIST_GRAPH);
@@ -62,6 +64,22 @@ public class GraphController {
     public void setGraph(SimpleGraph<String> graph) {
         this.graph = graph;
         updateGraphView();
+    }
+    @FXML
+    private void graphTask1() {
+        List<List<Integer>> edges = graph.task1();
+        String result = "Список рёбер в порядке Эйлерова цикла ";
+        for (List<Integer> edge : edges) {
+            result+= edge.get(0) + " - " + edge.get(1);
+            if (edges.size()-1 != edge.indexOf(edge))
+                result+=", ";
+        }
+        LabelMsg.setText(result);
+    }
+    @FXML
+    private void graphTask2() {
+        Vertex<String> vertex = graph.task2();
+        LabelMsg.setText("Центр взвешенного орграфа " + graph.get(vertex));
     }
     @FXML
     private void graphVerticesBtnClick() {

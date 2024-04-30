@@ -16,7 +16,7 @@
          <children>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Label fx:id="LabelMsg" text="Число вершин: хз">
+                  <Label fx:id="LabelMsg" text="">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -52,7 +52,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить вершину" onAction="#graphAddVertexBtnClick" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#graphAddVertexBtnClick" text="Добавить вершину" />
                </children>
                <padding>
                   <Insets top="5.0" />
@@ -72,7 +72,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить вершину" onAction="#graphRemoveVertexBtnClick" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#graphRemoveVertexBtnClick" text="Удалить вершину" />
                </children>
                <padding>
                   <Insets top="5.0" />
@@ -125,8 +125,24 @@
             </HBox>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Добавить ребро" onAction="#graphAddEdgeBtnClick" />
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Удалить ребро" onAction="#graphRemoveEdgeBtnClick" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#graphAddEdgeBtnClick" text="Добавить ребро" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#graphRemoveEdgeBtnClick" text="Удалить ребро" />
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <Button alignment="CENTER" maxWidth="200.0" mnemonicParsing="false" onAction="#graphTask1" text="Спискок ребер неориентированного графа в порядке двухпроходного эйлерова цикла" wrapText="true" />
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#graphTask2" prefWidth="200.0" text="Центр взвешенного орграфа на основе алгоритма Флойда" wrapText="true" />
                </children>
                <padding>
                   <Insets top="5.0" />
